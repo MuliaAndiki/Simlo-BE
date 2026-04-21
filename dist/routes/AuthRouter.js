@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+const AuthController_1 = __importDefault(require("@/controllers/AuthController"));
 class AuthRouter {
     authRouter;
     constructor() {
@@ -11,7 +12,8 @@ class AuthRouter {
         this.routes();
     }
     routes() {
-        //  Initial Route
+        this.authRouter.post("/google", AuthController_1.default.loginGoogle);
+        this.authRouter.patch("/picture", AuthController_1.default.patchPictureUser);
     }
 }
 exports.default = new AuthRouter().authRouter;

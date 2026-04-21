@@ -6,7 +6,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const body_parser_1 = __importDefault(require("body-parser"));
+const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
 const AuthRouter_1 = __importDefault(require("./routes/AuthRouter"));
+const swagger_1 = __importDefault(require("./swagger"));
 class App {
     app;
     constructor() {
@@ -16,12 +18,11 @@ class App {
     }
     middlewares() {
         this.app.use((0, cors_1.default)({ origin: "*", optionsSuccessStatus: 200 }));
-        this.app.use(express_1.default.urlencoded({ extended: false }));
+        this.app.use(express_1.default.urlencoded({ extended: true }));
         this.app.use(body_parser_1.default.json());
         this.app.use(express_1.default.json());
-        this.app.use(express_1.default.json());
-        this.app.use(express_1.default.urlencoded({ extended: true }));
         this.app.use("/api/auth", AuthRouter_1.default);
+        this.app.use("/api-docs", swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swagger_1.default));
     }
     routes() {
         this.app.get("/", (req, res) => {
