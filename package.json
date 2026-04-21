@@ -6,6 +6,7 @@
   "author": "muliaandiki <muliaandiki@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "@prisma/client": "^6.18.0",
     "bcryptjs": "^3.0.2",
     "body-parser": "^2.2.0",
     "cors": "^2.8.5",
@@ -18,7 +19,6 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
-    "@prisma/client": "^6.18.0",
     "@types/cors": "^2.8.18",
     "@types/express": "^5.0.2",
     "@types/jsonwebtoken": "^9.0.9",
@@ -35,7 +35,8 @@
   },
   "scripts": {
     "start": "node dist/server.js",
-    "build": "tsc",
-    "dev": "nodemon --watch src --ext ts --exec \"ts-node -r tsconfig-paths/register src/server.ts\""
+    "build": "npx prisma generate && tsc",
+    "dev": "nodemon --watch src --ext ts --exec \"ts-node -r tsconfig-paths/register src/server.ts\"",
+    "generate": "npx prisma generate"
   }
 }
