@@ -1,19 +1,13 @@
+import { RoleType } from "@prisma/client";
+
 export interface TAuth {
-  _id: any;
+  id: string;
   email: string;
   fullName: string;
-  phone: string;
+  picture: string;
+  role: RoleType;
   password: string;
-  token: string;
-  createdAt: Date;
-  updateAt: Date;
-  __v: any;
 }
 
-export type JwtPayload = Pick<TAuth, "_id" | "email" | "fullName" | "phone">;
-export type PickRegister = Pick<
-  TAuth,
-  "email" | "fullName" | "phone" | "password"
->;
-export type PickLogin = Pick<TAuth, "email" | "password">;
-export type PickLogout = Pick<TAuth, "_id">;
+export type JwtPayload = Pick<TAuth, "id" | "email" | "fullName" | "role">;
+export type PickPatchPicture = Pick<TAuth, "picture">;

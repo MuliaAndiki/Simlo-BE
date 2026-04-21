@@ -7,8 +7,84 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id         String        @id @default(uuid())
+  name       String
+  email      String
+  picture    String
+  role       RoleType
+  created_at DateTime      @default(now())
+  updated_at DateTime      @updatedAt
+  report     Report[]
+  session    UserSession[]
+}
 
-model Initial {
-  id String @id @default(uuid())
-  tag String
+model UserSession {
+  id            String   @id @default(ulid())
+  userID        String
+  session_token String
+  expires_at    DateTime
+  created_at    DateTime @default(now())
+  user          User     @relation(fields: [userID], references: [id])
+
+  @@index([userID])
+  @@map("Session")
+}
+
+model Report {
+  id             String     @id @default(uuid())
+  userID         String
+  image_url      String
+  latitude       Float
+  longitude      Float
+  city           String
+  address_detail String
+  reportStatus   reportType
+  created_at     DateTime   @default(now())
+  updated_at     DateTime   @updatedAt
+  ml             MlResult[]
+  user           User       @relation(fields: [userID], references: [id])
+
+  @@index([userID])
+  @@map("Report")
+}
+
+model MlResult {
+  id              String        @id @default(uuid())
+  reportID        String
+  is_Detected     Boolean
+  confidenceScore Float
+  model_version   String
+  processed_at    DateTime
+  boundingbox     BoundingBox[]
+  report          Report        @relation(fields: [reportID], references: [id])
+
+  @@index([reportID])
+  @@map("MlResult")
+}
+
+model BoundingBox {
+  id         String   @id @default(uuid())
+  mlResultID String
+  x          Float
+  y          Float
+  height     Float
+  width      Float
+  label      String
+  ml         MlResult @relation(fields: [mlResultID], references: [id])
+
+  @@index([mlResultID])
+  @@map("BoundingBox")
+}
+
+enum reportType {
+  isPending
+  inProgress
+  done
+  rejected
+}
+
+enum RoleType {
+  user
+  admin
 }
