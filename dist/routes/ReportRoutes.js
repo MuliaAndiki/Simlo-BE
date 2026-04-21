@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const ReportController_1 = __importDefault(require("@/controllers/ReportController"));
+const ReportController_1 = __importDefault(require("../controllers/ReportController"));
 class ReportRouter {
     reportRouter;
     constructor() {
