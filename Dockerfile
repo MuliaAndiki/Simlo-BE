@@ -3,23 +3,21 @@ FROM node:20-alpine AS builder
 
 WORKDIR /usr/src/app
 
-# Install dependencies for build
-COPY package.json package-lock.json* ./
+# Install all dependencies and generate Prisma client for build
+COPY package.json package-lock.json ./
 RUN npm install
 
-# Copy source and build
 COPY tsconfig.json ./
-COPY src ./src
 COPY prisma ./prisma
+COPY src ./src
 RUN npm run build
+RUN npm prune --production
 
-# Production image
 FROM node:20-alpine AS runtime
 WORKDIR /usr/src/app
 
-COPY package.json package-lock.json* ./
-RUN npm install --only=production
-
+COPY package.json package-lock.json ./
+COPY --from=builder /usr/src/app/node_modules ./node_modules
 COPY --from=builder /usr/src/app/dist ./dist
 COPY --from=builder /usr/src/app/prisma ./prisma
 
