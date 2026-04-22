@@ -1,6 +1,6 @@
 import prisma from "@/lib/prisma";
 import { JwtPayload } from "@/types/auth.types";
-import { PickCreateReport, PickDeleteReport } from "@/types/report.types";
+import { PickCreateReport } from "@/types/report.types";
 import { Response, Request } from "express";
 class ReportService {
   public async createReportService(
@@ -111,6 +111,44 @@ class ReportService {
       res.status(500).json({
         status: 500,
         message: "server internal error",
+        error: error,
+      });
+      return;
+    }
+  }
+  public async updateReportService(res: Response, req: Request) {
+    try {
+      const reports: PickCreateReport = req.body;
+      const { id } = req.params;
+
+      if (!id) {
+        res.status(404).json({
+          status: 404,
+          message: "params not found",
+        });
+        return;
+      }
+
+      const updated = await prisma.report.update({
+        where: {
+          id: id,
+        },
+        data: reports,
+      });
+
+      if (!updated) {
+        res.status(400).json({
+          status: 400,
+          message: "prisma bad requst",
+        });
+        return;
+      }
+
+      return { updated };
+    } catch (error) {
+      res.status(500).json({
+        status: 500,
+        message: "service internal error",
         error: error,
       });
       return;

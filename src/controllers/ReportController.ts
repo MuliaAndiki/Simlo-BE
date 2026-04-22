@@ -98,6 +98,41 @@ class ReportController {
       }
     },
   ];
+
+  public update = [
+    verifyToken,
+    async (req: Request, res: Response): Promise<void> => {
+      try {
+        const users: JwtPayload = req.user!;
+
+        if (!users) {
+          res.status(401).json({
+            status: 401,
+            message: "Unauthorized",
+          });
+          return;
+        }
+
+        const service = await ReportService.updateReportService(res, req);
+
+        if (!service) {
+          res.status(400).json({
+            status: 400,
+            message: "bad request",
+          });
+          return;
+        }
+
+        // respone
+      } catch (error) {
+        res.status(500).json({
+          status: 500,
+          message: "server internal error",
+          error: error,
+        });
+      }
+    },
+  ];
 }
 
 export default new ReportController();

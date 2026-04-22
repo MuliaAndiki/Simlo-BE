@@ -7,7 +7,11 @@ export interface TAuth {
   picture: string;
   role: RoleType;
   password: string;
+  sessionId: string;
 }
 
-export type JwtPayload = Pick<TAuth, "id" | "email" | "fullName" | "role">;
+export type JwtPayload = Pick<
+  TAuth,
+  "id" | "email" | "fullName" | "role" | "sessionId"
+>;
 export type PickPatchPicture = Pick<TAuth, "picture">;

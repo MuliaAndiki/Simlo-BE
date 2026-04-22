@@ -59,11 +59,50 @@ class AuthService {
         );
       }
 
-      const tokens = jwt.sign(
-        { id: user.id, email: user.email, picture: user.picture },
-        process.env.JWT_SECRET,
-        { expiresIn: "7d" },
-      );
+      await prisma.userSession.deleteMany({
+        where: {
+          userID: user.id,
+        },
+      });
+
+      const getHeader = (header: string | string[] | undefined): string => {
+        if (Array.isArray(header)) return header[0];
+        return header ?? "unknown";
+      };
+
+      const ipAddress =
+        getHeader(req.headers["x-forwarded-for"]) ||
+        getHeader(req.headers["x-real-ip"]) ||
+        getHeader(req.headers["cf-connecting-ip"]) ||
+        "unknown";
+
+      const session = await prisma.userSession.create({
+        data: {
+          userID: user.id,
+          userAgent: req.headers["user-agent"] ?? "unknown",
+          expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000),
+          ipAddres: ipAddress,
+        },
+      });
+
+      const payloadJwt: JwtPayload = {
+        id: user.id,
+        sessionId: session.id,
+        fullName: user.name,
+        email: user.email,
+        role: "user",
+      };
+
+      const tokens = jwt.sign(payloadJwt, process.env.JWT_SECRET, {
+        expiresIn: "7d",
+      });
+
+      await prisma.user.update({
+        where: {
+          id: user.id,
+        },
+        data: token,
+      });
 
       return { tokens, user };
     } catch (error) {

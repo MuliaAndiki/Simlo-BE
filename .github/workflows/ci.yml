@@ -1,0 +1,18 @@
+name: Simlo BE
+
+push:
+  branches:
+    - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Deploy to Back4app
+        uses: back4app/deploy-action@v1
+        with:
+          application_id: ${{ secrets.B4A_APP_ID }}
+          master_key: ${{ secrets.B4A_TOKEN }}
