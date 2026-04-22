@@ -1,8 +1,9 @@
 name: Simlo BE
 
-push:
-  branches:
-    - main
+on:
+  push:
+    branches:
+      - main
 
 jobs:
   deploy:
