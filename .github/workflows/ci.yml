@@ -1,4 +1,4 @@
-name: Simlo BE
+name: Deploy to Back4app
 
 on:
   push:
@@ -12,8 +12,10 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Deploy to Back4app
-        uses: back4app/deploy-action@v1
-        with:
-          application_id: ${{ secrets.B4A_APP_ID }}
-          master_key: ${{ secrets.B4A_TOKEN }}
+      - name: Deploy via API
+        run: |
+          curl -X POST \
+          -H "X-Parse-Application-Id: ${{ secrets.B4A_APP_ID }}" \
+          -H "X-Parse-Master-Key: ${{ secrets.B4A_TOKEN }}" \
+          -H "Content-Type: application/json" \
+          https://parseapi.back4app.com/functions/deployApp
