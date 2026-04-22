@@ -5,6 +5,7 @@ import swaggerUi from "swagger-ui-express";
 import ReportRoutes from "./routes/ReportRoutes";
 import swaggerSpec from "./swagger";
 import AuthRouter from "./routes/AuthRouter";
+import UserSessionRoutes from "./routes/UserSessionRoutes";
 
 class App {
   public app: Application;
@@ -22,6 +23,7 @@ class App {
     this.app.use(express.json());
     this.app.use("/api/auth", AuthRouter);
     this.app.use("/api/report", ReportRoutes);
+    this.app.use("/api/session", UserSessionRoutes);
 
     this.app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
   }

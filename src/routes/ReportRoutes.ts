@@ -8,7 +8,7 @@ class ReportRouter {
   }
   private routes() {
     this.reportRouter.post("/created", ReportController.create);
-    this.reportRouter.delete("/delete", ReportController.delete);
+    this.reportRouter.delete("/delete/:id", ReportController.delete);
   }
 }
 
