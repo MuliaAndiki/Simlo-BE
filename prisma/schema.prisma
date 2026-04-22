@@ -22,9 +22,10 @@ model User {
 model UserSession {
   id            String   @id @default(ulid())
   userID        String
-  session_token String
   expires_at    DateTime
   created_at    DateTime @default(now())
+  userAgent     String
+  ipAddres String
   user          User     @relation(fields: [userID], references: [id])
 
   @@index([userID])

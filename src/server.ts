@@ -1,6 +1,6 @@
 import app from "./app";
 import { connectWithRetry } from "./config/database";
-const port = process.env.PORT ? parseInt(process.env.PORT) : 3000;
+const port = process.env.PORT ? parseInt(process.env.PORT) : 5000;
 
 async function connected() {
   console.log("Memulai inisialisasi server...");
