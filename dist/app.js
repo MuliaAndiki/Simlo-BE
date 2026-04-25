@@ -10,6 +10,7 @@ const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
 const ReportRoutes_1 = __importDefault(require("./routes/ReportRoutes"));
 const swagger_1 = __importDefault(require("./swagger"));
 const AuthRouter_1 = __importDefault(require("./routes/AuthRouter"));
+const UserSessionRoutes_1 = __importDefault(require("./routes/UserSessionRoutes"));
 class App {
     app;
     constructor() {
@@ -24,6 +25,7 @@ class App {
         this.app.use(express_1.default.json());
         this.app.use("/api/auth", AuthRouter_1.default);
         this.app.use("/api/report", ReportRoutes_1.default);
+        this.app.use("/api/session", UserSessionRoutes_1.default);
         this.app.use("/api-docs", swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swagger_1.default));
     }
     routes() {

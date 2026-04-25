@@ -90,4 +90,112 @@ export const reportSchemas = {
       },
     },
   },
+  "/api/report/update/{id}": {
+    put: {
+      tags: ["Report"],
+      summary: "Update Report Apabila Belum Done",
+      security: [{ bearerAuth: [] }],
+      requestBody: {
+        required: true,
+        content: {
+          "application/json": {
+            schema: { $ref: "#/components/schemas/UpdateReportRequest" },
+          },
+        },
+      },
+      parameters: [
+        {
+          name: "id",
+          in: "path",
+          required: true,
+          schema: { type: "string" },
+          description: "ID Laporan Yang Bakal DiUpdate",
+        },
+      ],
+      responses: {
+        "203": {
+          description: "Laporan berhasil update",
+          content: {
+            "application/json": {
+              schema: { $ref: "#/components/schemas/ApiResponse" },
+            },
+          },
+        },
+        "400": {
+          description: "Bad request atau status tidak memenuhi syarat",
+          content: {
+            "application/json": {
+              schema: { $ref: "#/components/schemas/ErrorRespone" },
+            },
+          },
+        },
+        "401": {
+          description: "Unauthorized",
+          content: {
+            "application/json": {
+              schema: { $ref: "#/components/schemas/ErrorResponse" },
+            },
+          },
+        },
+        "500": {
+          description: "Server error",
+          content: {
+            "application/json": {
+              schema: { $ref: "#/components/schemas/ErrorResponse" },
+            },
+          },
+        },
+      },
+    },
+  },
+  "/api/report/patch/{id}": {
+    patch: {
+      tags: ["Report"],
+      summary: "Update Status Report By Admin",
+      security: [{ bearerAuth: [], baseRole: ["admin"] }],
+      parameters: [
+        {
+          name: "id",
+          in: "path",
+          required: true,
+          schema: { type: "string" },
+          description: "ID Laporan Yang Bakal DiUpdate",
+        },
+      ],
+      responses: {
+        "203": {
+          description: "Laporan berhasil update status",
+          content: {
+            "application/json": {
+              schema: { $ref: "#/components/schemas/ApiResponse" },
+            },
+          },
+        },
+        "400": {
+          description: "Bad request atau status tidak memenuhi syarat",
+          content: {
+            "application/json": {
+              schema: { $ref: "#/components/schemas/ErrorRespone" },
+            },
+          },
+        },
+        "401": {
+          description: "Unauthorized",
+          content: {
+            "application/json": {
+              schema: { $ref: "#/components/schemas/ErrorResponse" },
+            },
+          },
+        },
+        "500": {
+          description: "Server error",
+          content: {
+            "application/json": {
+              schema: { $ref: "#/components/schemas/ErrorResponse" },
+            },
+          },
+        },
+      },
+    },
+  },
 };

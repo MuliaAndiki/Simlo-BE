@@ -12,17 +12,9 @@ class AuthRouter {
         this.routes();
     }
     routes() {
-        /**
-         * @swagger
-         * /login:
-         *   post:
-         *     summary: Retrieve a list of users
-         *     responses:
-         *       200:
-         *         description: A list of users.
-         */
         this.authRouter.post("/google", AuthController_1.default.loginGoogle);
         this.authRouter.patch("/picture", AuthController_1.default.patchPictureUser);
+        this.authRouter.post("/developer", AuthController_1.default.loginDeveloper);
     }
 }
 exports.default = new AuthRouter().authRouter;

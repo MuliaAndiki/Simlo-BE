@@ -9,6 +9,7 @@
     "@prisma/client": "^6.18.0",
     "bcryptjs": "^3.0.2",
     "body-parser": "^2.2.0",
+    "cloudinary": "^2.9.0",
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
@@ -38,6 +39,10 @@
     "start": "node dist/server.js",
     "build": "npx prisma generate && tsc && npx tsc-alias",
     "dev": "nodemon --watch src --ext ts --exec \"ts-node -r tsconfig-paths/register src/server.ts\"",
-    "generate": "npx prisma generate"
+    "generate": "npx prisma generate",
+    "seed": "npx prisma db seed"
+  },
+  "prisma": {
+    "seed": "ts-node -r tsconfig-paths/register src/seed/user.ts"
   }
 }

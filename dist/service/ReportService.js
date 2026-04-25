@@ -99,5 +99,84 @@ class ReportService {
             return;
         }
     }
+    async updateReportService(res, req) {
+        try {
+            const reports = req.body;
+            const { id } = req.params;
+            if (!id) {
+                res.status(404).json({
+                    status: 404,
+                    message: "params not found",
+                });
+                return;
+            }
+            const updated = await prisma_1.default.report.update({
+                where: {
+                    id: id,
+                },
+                data: reports,
+            });
+            if (!updated) {
+                res.status(400).json({
+                    status: 400,
+                    message: "prisma bad requst",
+                });
+                return;
+            }
+            return { updated };
+        }
+        catch (error) {
+            res.status(500).json({
+                status: 500,
+                message: "service internal error",
+                error: error,
+            });
+            return;
+        }
+    }
+    async updateStatusReportService(res, req) {
+        try {
+            const reports = req.body;
+            const { id } = req.params;
+            if (!id) {
+                res.status(404).json({
+                    status: 404,
+                    message: "params not found",
+                });
+                return;
+            }
+            if (!reports.reportStatus) {
+                res.status(404).json({
+                    status: 404,
+                    message: "body not found",
+                });
+                return;
+            }
+            const status = await prisma_1.default.report.update({
+                where: {
+                    id: id,
+                },
+                data: {
+                    reportStatus: reports.reportStatus,
+                },
+            });
+            if (!status) {
+                res.status(400).json({
+                    status: 400,
+                    message: "bad request",
+                });
+                return;
+            }
+            return { status };
+        }
+        catch (error) {
+            res.status(500).json({
+                status: 500,
+                message: "service internal error",
+                error: error,
+            });
+            return;
+        }
+    }
 }
 exports.default = new ReportService();
