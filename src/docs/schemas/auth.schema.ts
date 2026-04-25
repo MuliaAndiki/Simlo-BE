@@ -80,4 +80,7 @@ export const authSchemas = {
       },
     },
   },
+  "/api/auth/developer": {
+    //
+  },
 };

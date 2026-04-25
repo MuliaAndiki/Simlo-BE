@@ -75,6 +75,32 @@ class AuthController {
       }
     },
   ];
+  public loginDeveloper = async (req: Request, res: Response) => {
+    try {
+      const service = await AuthService.LoginDeveloperService(res, req);
+
+      if (!service) {
+        res.status(400).json({
+          status: 400,
+          message: "service bad request",
+        });
+        return;
+      }
+
+      res.status(200).json({
+        status: 200,
+        message: "successfully login for developer",
+        data: service,
+      });
+    } catch (error) {
+      res.status(500).json({
+        status: 500,
+        message: "server internal error",
+        error: error,
+      });
+      return;
+    }
+  };
 }
 
 export default new AuthController();

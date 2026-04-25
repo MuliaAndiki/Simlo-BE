@@ -21,3 +21,4 @@ export type PickCreateReport = Pick<
   | "reportStatus"
 >;
 export type PickDeleteReport = Pick<IReport, "id">;
+export type PickStatusReport = Pick<IReport, "reportStatus">;
