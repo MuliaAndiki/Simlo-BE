@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
-import { Request, Response, NextFunction } from "express";
+import { Request, Response, NextFunction, RequestHandler } from "express";
+import { RoleType } from "@prisma/client";
 import { JwtPayload } from "../types/auth.types";
 
 // Extend Request interface untuk menambahkan user property
@@ -65,4 +66,26 @@ export const verifyToken = (
       });
     }
   }
+};
+
+export const RoleBase = (...allowedRoles: RoleType[]): RequestHandler => {
+  return (req: Request, res: Response, next: NextFunction): void => {
+    if (!req.user) {
+      res.status(401).json({
+        status: 401,
+        message: "Unauthorized. User not authenticated.",
+      });
+      return;
+    }
+
+    if (allowedRoles.length > 0 && !allowedRoles.includes(req.user.role)) {
+      res.status(403).json({
+        status: 403,
+        message: "Forbidden. Insufficient role privileges.",
+      });
+      return;
+    }
+
+    next();
+  };
 };

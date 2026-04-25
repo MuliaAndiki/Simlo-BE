@@ -77,11 +77,8 @@ const options: swaggerJSDoc.Options = {
         ApiResponse: {
           type: "object",
           properties: {
-            status: { type: "integer", example: 200 },
-            message: {
-              type: "string",
-              example: "successfully login with google",
-            },
+            status: { type: "integer" },
+            message: { type: "string" },
             data: { type: "object" },
           },
         },

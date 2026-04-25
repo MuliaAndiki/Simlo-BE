@@ -2,7 +2,12 @@ import { Response, Request } from "express";
 import prisma from "@/lib/prisma";
 import { OAuth2Client } from "google-auth-library";
 import jwt from "jsonwebtoken";
-import { JwtPayload, PickPatchPicture } from "@/types/auth.types";
+import {
+  JwtPayload,
+  PickLoginDeveloper,
+  PickPatchPicture,
+} from "@/types/auth.types";
+import { getHeader } from "@/utils/headers";
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 class AuthService {
@@ -65,11 +70,6 @@ class AuthService {
         },
       });
 
-      const getHeader = (header: string | string[] | undefined): string => {
-        if (Array.isArray(header)) return header[0];
-        return header ?? "unknown";
-      };
-
       const ipAddress =
         getHeader(req.headers["x-forwarded-for"]) ||
         getHeader(req.headers["x-real-ip"]) ||
@@ -88,7 +88,7 @@ class AuthService {
       const payloadJwt: JwtPayload = {
         id: user.id,
         sessionId: session.id,
-        fullName: user.name,
+        name: user.name,
         email: user.email,
         role: "user",
       };
@@ -129,6 +129,7 @@ class AuthService {
         });
         return;
       }
+
       const patch = await prisma.user.update({
         where: {
           id: users.id,
@@ -153,6 +154,84 @@ class AuthService {
         status: 500,
         error: error,
       });
+    }
+  }
+  public async LoginDeveloperService(res: Response, req: Request) {
+    try {
+      const users: PickLoginDeveloper = req.body;
+
+      if (!users.email) {
+        res.status(404).json({
+          status: 404,
+          message: "body not found",
+        });
+        return;
+      }
+
+      const auth = await prisma.user.findFirst({
+        where: {
+          email: users.email,
+        },
+        select: {
+          id: true,
+          name: true,
+          role: true,
+        },
+      });
+
+      if (!auth) {
+        res.status(404).json({
+          status: 404,
+          message: "email not registered",
+        });
+        return;
+      }
+
+      await prisma.userSession.deleteMany({
+        where: {
+          userID: auth.id,
+        },
+      });
+
+      const ipAddress =
+        getHeader(req.headers["x-forwarded-for"]) ||
+        getHeader(req.headers["x-real-ip"]) ||
+        getHeader(req.headers["cf-connecting-ip"]) ||
+        "unknown";
+
+      const session = await prisma.userSession.create({
+        data: {
+          userID: auth.id,
+          userAgent: req.headers["user-agent"] ?? "unknown",
+          expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000),
+          ipAddres: ipAddress,
+        },
+      });
+
+      const payloadJwt: JwtPayload = {
+        id: auth.id,
+        sessionId: session.id,
+        name: auth.name,
+        email: users.email,
+        role: auth.role,
+      };
+
+      if (!process.env.JWT_SECRET) {
+        throw new Error("jwt screet not found");
+      }
+
+      const tokens = jwt.sign(payloadJwt, process.env.JWT_SECRET, {
+        expiresIn: "7d",
+      });
+
+      return { tokens };
+    } catch (error) {
+      res.status(500).json({
+        status: 500,
+        message: "server internal error",
+        error: error,
+      });
+      return;
     }
   }
 }

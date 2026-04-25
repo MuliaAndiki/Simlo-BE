@@ -13,7 +13,9 @@ class ReportRouter {
     }
     routes() {
         this.reportRouter.post("/created", ReportController_1.default.create);
-        this.reportRouter.delete("/delete", ReportController_1.default.delete);
+        this.reportRouter.delete("/delete/:id", ReportController_1.default.delete);
+        this.reportRouter.put("/update/:id", ReportController_1.default.update);
+        this.reportRouter.patch("/patch/:id", ReportController_1.default.updateStatus);
     }
 }
 exports.default = new ReportRouter().reportRouter;
