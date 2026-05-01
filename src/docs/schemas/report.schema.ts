@@ -8,7 +8,34 @@ export const reportSchemas = {
         required: true,
         content: {
           "application/json": {
-            schema: { $ref: "#/components/schemas/CreateReportRequest" },
+            schema: {
+              type: "object",
+              properties: {
+                city: { type: "string", example: "Jakarta" },
+                address_detail: {
+                  type: "string",
+                  example: "Jl. Sudirman No. 10",
+                },
+                image_url: {
+                  type: "string",
+                  example: "https://example.com/report.jpg",
+                },
+                latitude: { type: "number", example: -6.2 },
+                longitude: { type: "number", example: 106.816666 },
+                reportStatus: {
+                  type: "string",
+                  enum: ["isPending", "inProgress", "done", "rejected"],
+                },
+              },
+              required: [
+                "city",
+                "address_detail",
+                "image_url",
+                "latitude",
+                "longitude",
+                "reportStatus",
+              ],
+            },
           },
         },
       },
@@ -96,10 +123,27 @@ export const reportSchemas = {
       summary: "Update Report Apabila Belum Done",
       security: [{ bearerAuth: [] }],
       requestBody: {
-        required: true,
         content: {
           "application/json": {
-            schema: { $ref: "#/components/schemas/UpdateReportRequest" },
+            schema: {
+              type: "object",
+              properties: {
+                city: { type: "string", example: "update reports" },
+                addres_detail: { type: "string", example: "location update" },
+                latitude: {
+                  type: "number",
+                  example: 123123,
+                },
+                longitude: {
+                  type: "number",
+                  example: -312312,
+                },
+                reportStatus: {
+                  type: "string",
+                  enum: ["isPending", "inProgress", "done", "rejected"],
+                },
+              },
+            },
           },
         },
       },
@@ -162,6 +206,21 @@ export const reportSchemas = {
           description: "ID Laporan Yang Bakal DiUpdate",
         },
       ],
+      requestBody: {
+        content: {
+          "application/json": {
+            schema: {
+              type: "object",
+              properties: {
+                reportStatus: {
+                  type: "string",
+                  enum: ['isPending", "inProgress", "done", "rejected'],
+                },
+              },
+            },
+          },
+        },
+      },
       responses: {
         "203": {
           description: "Laporan berhasil update status",

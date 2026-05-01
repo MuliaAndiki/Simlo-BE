@@ -2,6 +2,7 @@ import prisma from "@/lib/prisma";
 import { JwtPayload } from "@/types/auth.types";
 import { PickCreateReport, PickStatusReport } from "@/types/report.types";
 import { Response, Request } from "express";
+import ModelsService from "./ModelsService";
 class ReportService {
   public async createReportService(
     res: Response,
@@ -24,9 +25,7 @@ class ReportService {
           message: "body not found",
         });
       }
-      //handler post foto
 
-      // prisma
       const createed = await prisma.report.create({
         data: {
           city: reports.city,
@@ -47,7 +46,42 @@ class ReportService {
         return;
       }
 
-      return { createed };
+      const prediction = await ModelsService.GetPrediction(
+        createed.image_url,
+        res,
+      );
+
+      if (!prediction) {
+        res.status(500).json({
+          status: 500,
+          message: "ml service error",
+        });
+        return;
+      }
+
+      const resultModels = await prisma.mlResult.create({
+        data: {
+          reportID: createed.id,
+          is_Detected: prediction.is_Detected,
+          confidenceScore: prediction.confidenceScore,
+          model_version: prediction.model_version,
+          processed_at: prediction.processed_at,
+          boundingbox: {
+            create: prediction.boundingBoxes.map((box) => ({
+              x: box.x,
+              height: box.height,
+              label: box.label,
+              width: box.width,
+              y: box.y,
+            })),
+          },
+        },
+        include: {
+          boundingbox: true,
+        },
+      });
+
+      return { createed, resultModels };
     } catch (error) {
       res.status(500).json({
         status: 500,

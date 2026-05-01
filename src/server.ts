@@ -1,5 +1,6 @@
 import app from "./app";
 import { connectWithRetry } from "./config/database";
+import { loadMLModel } from "./utils/loader";
 const port = process.env.PORT ? parseInt(process.env.PORT) : 5000;
 
 async function connected() {
@@ -7,6 +8,7 @@ async function connected() {
   try {
     console.log("Mencoba koneksi database...");
     await connectWithRetry();
+    await loadMLModel();
     console.log("Database terkoneksi!");
 
     app.listen(port, "0.0.0.0", () => {
