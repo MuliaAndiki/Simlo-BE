@@ -26,7 +26,7 @@ model UserSession {
   created_at    DateTime @default(now())
   userAgent     String
   ipAddres String
-  user          User     @relation(fields: [userID], references: [id])
+  user          User     @relation(fields: [userID], references: [id],onDelete: Cascade)
 
   @@index([userID])
   @@map("Session")
@@ -44,7 +44,7 @@ model Report {
   created_at     DateTime   @default(now())
   updated_at     DateTime   @updatedAt
   ml             MlResult[]
-  user           User       @relation(fields: [userID], references: [id])
+  user           User       @relation(fields: [userID], references: [id],onDelete: Cascade)
 
   @@index([userID])
   @@map("Report")
@@ -58,7 +58,7 @@ model MlResult {
   model_version   String
   processed_at    DateTime
   boundingbox     BoundingBox[]
-  report          Report        @relation(fields: [reportID], references: [id])
+  report          Report        @relation(fields: [reportID], references: [id], onDelete: Cascade)
 
   @@index([reportID])
   @@map("MlResult")
@@ -72,7 +72,7 @@ model BoundingBox {
   height     Float
   width      Float
   label      String
-  ml         MlResult @relation(fields: [mlResultID], references: [id])
+  ml         MlResult @relation(fields: [mlResultID], references: [id],onDelete: Cascade)
 
   @@index([mlResultID])
   @@map("BoundingBox")

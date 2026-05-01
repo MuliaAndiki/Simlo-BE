@@ -7,6 +7,7 @@
   "license": "MIT",
   "dependencies": {
     "@prisma/client": "^6.18.0",
+    "@tensorflow/tfjs-node": "^0.1.11",
     "bcryptjs": "^3.0.2",
     "body-parser": "^2.2.0",
     "cloudinary": "^2.9.0",
@@ -14,14 +15,17 @@
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "google-auth-library": "^10.6.2",
+    "hpp": "^0.2.3",
     "jsonwebtoken": "^9.0.2",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",
+    "helmet": "^8.1.0",
     "zod": "^4.3.6"
   },
   "devDependencies": {
     "@types/cors": "^2.8.18",
     "@types/express": "^5.0.2",
+    "@types/hpp": "^0.2.7",
     "@types/jsonwebtoken": "^9.0.9",
     "@types/mongoose": "^5.11.97",
     "@types/node": "^22.15.21",

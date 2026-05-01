@@ -234,6 +234,38 @@ class AuthService {
       return;
     }
   }
+  public async LogoutService(res: Response, id: string) {
+    try {
+      const users = await prisma.user.findUnique({
+        where: {
+          id: id,
+        },
+      });
+
+      if (!users) {
+        res.status(400).json({
+          status: 400,
+          message: "users not found",
+        });
+        return;
+      }
+
+      const session = await prisma.userSession.deleteMany({
+        where: {
+          userID: id,
+        },
+      });
+
+      return session;
+    } catch (error) {
+      res.status(500).json({
+        status: 500,
+        message: "service internal error",
+        error: error,
+      });
+      return;
+    }
+  }
 }
 
 export default new AuthService();
