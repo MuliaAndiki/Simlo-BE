@@ -1,6 +1,11 @@
 import { z } from "zod";
 const envSchema = z.object({
-  // initial env
+  DATABASE_URL: z.string(),
+  JWT_SECRET: z.string(),
+  GOOGLE_CLIENT_ID: z.string(),
+  GOOGLE_CLIENT_SECRET: z.string(),
+  PORT: z.number(),
+  INTERNAL_API_SECRET: z.string(),
 });
 const _env = envSchema.safeParse(process.env);
 
