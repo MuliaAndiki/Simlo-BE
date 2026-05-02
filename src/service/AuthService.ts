@@ -266,6 +266,32 @@ class AuthService {
       return;
     }
   }
+  public async GetMeService(res: Response, id: string) {
+    try {
+      const users = await prisma.user.findFirst({
+        where: {
+          id: id,
+        },
+      });
+
+      if (!users) {
+        res.status(404).json({
+          status: 404,
+          message: "users not found",
+        });
+        return;
+      }
+
+      return users;
+    } catch (error) {
+      res.status(500).json({
+        status: 500,
+        message: "service internal error",
+        error: error,
+      });
+      return;
+    }
+  }
 }
 
 export default new AuthService();

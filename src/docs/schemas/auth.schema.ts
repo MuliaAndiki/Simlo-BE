@@ -176,4 +176,37 @@ export const authSchemas = {
       },
     },
   },
+  "/api/auth/me": {
+    get: {
+      tags: ["Auth"],
+      summary: "mendapat data saya",
+      security: [{ bearerAuth: [], ApiKeyAuth: [] }],
+      responses: {
+        "201": {
+          description: "Laporan berhasil dibuat",
+          content: {
+            "application/json": {
+              schema: { $ref: "#/components/schemas/ApiResponse" },
+            },
+          },
+        },
+        "400": {
+          description: "Bad request",
+          content: {
+            "application/json": {
+              schema: { $ref: "#/components/schemas/ErrorResponse" },
+            },
+          },
+        },
+        "500": {
+          description: "Server error",
+          content: {
+            "application/json": {
+              schema: { $ref: "#/components/schemas/ErrorResponse" },
+            },
+          },
+        },
+      },
+    },
+  },
 };
