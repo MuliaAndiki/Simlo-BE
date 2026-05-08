@@ -12,6 +12,7 @@ class AuthRouter {
     this.authRouter.patch("/picture", AuthController.patchPictureUser);
     this.authRouter.post("/developer", AuthController.loginDeveloper);
     this.authRouter.post("/logout", AuthController.logout);
+    this.authRouter.get("/me", AuthController.GetMe);
   }
 }
 

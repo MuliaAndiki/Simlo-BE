@@ -11,6 +11,8 @@ class ReportRouter {
     this.reportRouter.delete("/delete/:id", ReportController.delete);
     this.reportRouter.put("/update/:id", ReportController.update);
     this.reportRouter.patch("/patch/:id", ReportController.updateStatus);
+    this.reportRouter.get("/report", ReportController.getAllReport);
+    this.reportRouter.get("/report/:id", ReportController.getReportById);
   }
 }
 

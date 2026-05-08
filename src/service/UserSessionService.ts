@@ -27,6 +27,33 @@ class UserSessionService {
       return;
     }
   }
+  public async getAllCurentLogin(res: Response, users: JwtPayload) {
+    try {
+      const allCurent = await prisma.userSession.findMany({
+        where: {
+          userID: users.id,
+        },
+        orderBy: {
+          created_at: "asc",
+        },
+      });
+
+      if (!allCurent) {
+        res.status(400).json({
+          status: 400,
+          message: "query error",
+        });
+        return;
+      }
+      return allCurent;
+    } catch (error) {
+      res.status(500).json({
+        status: 500,
+        message: "service internal error",
+        error: error,
+      });
+    }
+  }
 }
 
 export default new UserSessionService();

@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import { JwtPayload } from "@/types/auth.types";
 import { RoleBase, verifyToken } from "@/middleware/auth";
 import ReportService from "@/service/ReportService";
-
 declare global {
   namespace Express {
     interface Request {
@@ -171,6 +170,93 @@ class ReportController {
         res.status(500).json({
           status: 500,
           message: "server internal error ",
+          error: error,
+        });
+        return;
+      }
+    },
+  ];
+  public getAllReport = [
+    verifyToken,
+    async (req: Request, res: Response): Promise<void> => {
+      try {
+        const users = req.user;
+
+        if (!users) {
+          res.status(401).json({
+            status: 401,
+            message: "Unauthorized",
+          });
+          return;
+        }
+
+        const service = await ReportService.getReportService(res);
+
+        if (!service) {
+          res.status(400).json({
+            status: 400,
+            message: "service bad request",
+          });
+          return;
+        }
+
+        res.status(200).json({
+          status: 200,
+          message: "successfully get report",
+          data: service,
+        });
+      } catch (error) {
+        res.status(500).json({
+          status: 500,
+          message: "server internal error",
+          error: error,
+        });
+        return;
+      }
+    },
+  ];
+  public getReportById = [
+    verifyToken,
+    async (req: Request, res: Response): Promise<void> => {
+      try {
+        const users = req.user;
+        const { id } = req.params;
+
+        if (!users) {
+          res.status(401).json({
+            status: 401,
+            message: "Unauthorized",
+          });
+          return;
+        }
+
+        if (!id) {
+          res.status(404).json({
+            status: 404,
+            message: "params not found",
+          });
+          return;
+        }
+
+        const service = await ReportService.getReportServiceByID(res, id);
+
+        if (!service) {
+          res.status(400).json({
+            status: 400,
+            message: "service bad request",
+          });
+          return;
+        }
+
+        res.status(200).json({
+          status: 200,
+          message: "successfully get report byID",
+          data: service,
+        });
+      } catch (error) {
+        res.status(500).json({
+          status: 500,
+          message: "server internal error",
           error: error,
         });
         return;

@@ -3,6 +3,7 @@ export const authSchemas = {
     post: {
       tags: ["Auth"],
       summary: "Login menggunakan Google ID token",
+      security: [{ ApiKeyAuth: [] }],
       requestBody: {
         required: true,
         content: {
@@ -49,7 +50,7 @@ export const authSchemas = {
     patch: {
       tags: ["Auth"],
       summary: "Update profil picture user",
-      security: [{ bearerAuth: [] }],
+      security: [{ bearerAuth: [], ApiKeyAuth: [] }],
       requestBody: {
         required: true,
         content: {
@@ -99,6 +100,7 @@ export const authSchemas = {
     post: {
       tags: ["Auth"],
       summary: "login for get token",
+      security: [{ ApiKeyAuth: [] }],
       requestBody: {
         required: true,
         content: {
@@ -147,6 +149,39 @@ export const authSchemas = {
     post: {
       tags: ["Auth"],
       summary: "logout for application",
+      security: [{ bearerAuth: [], ApiKeyAuth: [] }],
+      responses: {
+        "201": {
+          description: "Laporan berhasil dibuat",
+          content: {
+            "application/json": {
+              schema: { $ref: "#/components/schemas/ApiResponse" },
+            },
+          },
+        },
+        "400": {
+          description: "Bad request",
+          content: {
+            "application/json": {
+              schema: { $ref: "#/components/schemas/ErrorResponse" },
+            },
+          },
+        },
+        "500": {
+          description: "Server error",
+          content: {
+            "application/json": {
+              schema: { $ref: "#/components/schemas/ErrorResponse" },
+            },
+          },
+        },
+      },
+    },
+  },
+  "/api/auth/me": {
+    get: {
+      tags: ["Auth"],
+      summary: "mendapat data saya",
       security: [{ bearerAuth: [], ApiKeyAuth: [] }],
       responses: {
         "201": {
