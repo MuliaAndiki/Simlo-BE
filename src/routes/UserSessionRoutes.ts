@@ -9,6 +9,10 @@ class UserSessionRoutes {
 
   private routes() {
     this.userSessionRouter.get("/current", UserSessionController.curentUser);
+    this.userSessionRouter.get(
+      "/allCurent",
+      UserSessionController.GetAllCurruentLogin,
+    );
   }
 }
 
