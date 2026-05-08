@@ -3,7 +3,7 @@ export const reportSchemas = {
     post: {
       tags: ["Report"],
       summary: "Buat laporan baru",
-      security: [{ bearerAuth: [] }],
+      security: [{ bearerAuth: [], ApiKeyAuth: [] }],
       requestBody: {
         required: true,
         content: {
@@ -71,7 +71,7 @@ export const reportSchemas = {
     delete: {
       tags: ["Report"],
       summary: "Hapus laporan berdasarkan id",
-      security: [{ bearerAuth: [] }],
+      security: [{ bearerAuth: [], ApiKeyAuth: [] }],
       parameters: [
         {
           name: "id",
@@ -121,7 +121,7 @@ export const reportSchemas = {
     put: {
       tags: ["Report"],
       summary: "Update Report Apabila Belum Done",
-      security: [{ bearerAuth: [] }],
+      security: [{ bearerAuth: [], ApiKeyAuth: [] }],
       requestBody: {
         content: {
           "application/json": {
@@ -196,7 +196,7 @@ export const reportSchemas = {
     patch: {
       tags: ["Report"],
       summary: "Update Status Report By Admin",
-      security: [{ bearerAuth: [], baseRole: ["admin"] }],
+      security: [{ bearerAuth: [], baseRole: ["admin"], ApiKeyAuth: [] }],
       parameters: [
         {
           name: "id",
@@ -235,6 +235,81 @@ export const reportSchemas = {
           content: {
             "application/json": {
               schema: { $ref: "#/components/schemas/ErrorRespone" },
+            },
+          },
+        },
+        "401": {
+          description: "Unauthorized",
+          content: {
+            "application/json": {
+              schema: { $ref: "#/components/schemas/ErrorResponse" },
+            },
+          },
+        },
+        "500": {
+          description: "Server error",
+          content: {
+            "application/json": {
+              schema: { $ref: "#/components/schemas/ErrorResponse" },
+            },
+          },
+        },
+      },
+    },
+  },
+  "/api/report/get": {
+    get: {
+      tags: ["Report"],
+      summary: "Get All Report",
+      security: [{ bearerAuth: [], ApiKeyAuth: [] }],
+      responses: {
+        "200": {
+          description: "Berhasil mengambil seluruh report ",
+          content: {
+            "application/json": {
+              schema: { $ref: "#/components/schemas/ApiResponse" },
+            },
+          },
+        },
+        "401": {
+          description: "Unauthorized",
+          content: {
+            "application/json": {
+              schema: { $ref: "#/components/schemas/ErrorResponse" },
+            },
+          },
+        },
+        "500": {
+          description: "Server error",
+          content: {
+            "application/json": {
+              schema: { $ref: "#/components/schemas/ErrorResponse" },
+            },
+          },
+        },
+      },
+    },
+  },
+  "/api/report/get/:id": {
+    get: {
+      tags: ["Report"],
+      summary: "Get All Report By ID",
+      security: [{ bearerAuth: [], ApiKeyAuth: [] }],
+      parameters: [
+        {
+          name: "id",
+          in: "path",
+          required: true,
+          schema: { type: "string" },
+          description: "ID Laporan Yang Bakal DiGet",
+        },
+      ],
+      responses: {
+        "200": {
+          description: "Berhasil mengambil report by id",
+          content: {
+            "application/json": {
+              schema: { $ref: "#/components/schemas/ApiResponse" },
             },
           },
         },

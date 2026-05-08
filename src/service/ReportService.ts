@@ -237,6 +237,57 @@ class ReportService {
       return;
     }
   }
+  public async getReportService(res: Response) {
+    try {
+      const getAllReport = await prisma.report.findMany({
+        orderBy: {
+          created_at: "asc",
+        },
+      });
+
+      if (!getAllReport) {
+        res.status(400).json({
+          status: 400,
+          message: "query get report error",
+        });
+        return;
+      }
+
+      return getAllReport;
+    } catch (error) {
+      res.status(500).json({
+        status: 500,
+        message: "service internal error",
+        error: error,
+      });
+      return;
+    }
+  }
+  public async getReportServiceByID(res: Response, id: string) {
+    try {
+      const getReportById = await prisma.report.findUnique({
+        where: {
+          id: id,
+        },
+      });
+
+      if (!getReportById) {
+        res.status(400).json({
+          status: 400,
+          message: "bad request",
+        });
+        return;
+      }
+
+      return getReportById;
+    } catch (error) {
+      res.status(500).json({
+        status: 500,
+        message: "service internal error",
+        error: error,
+      });
+    }
+  }
 }
 
 export default new ReportService();

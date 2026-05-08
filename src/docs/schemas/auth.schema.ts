@@ -3,6 +3,7 @@ export const authSchemas = {
     post: {
       tags: ["Auth"],
       summary: "Login menggunakan Google ID token",
+      security: [{ ApiKeyAuth: [] }],
       requestBody: {
         required: true,
         content: {
@@ -49,7 +50,7 @@ export const authSchemas = {
     patch: {
       tags: ["Auth"],
       summary: "Update profil picture user",
-      security: [{ bearerAuth: [] }],
+      security: [{ bearerAuth: [], ApiKeyAuth: [] }],
       requestBody: {
         required: true,
         content: {
@@ -99,6 +100,7 @@ export const authSchemas = {
     post: {
       tags: ["Auth"],
       summary: "login for get token",
+      security: [{ ApiKeyAuth: [] }],
       requestBody: {
         required: true,
         content: {
