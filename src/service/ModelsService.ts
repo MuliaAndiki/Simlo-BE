@@ -25,7 +25,7 @@ class MlClassServive {
   }
   public async GetPrediction(imageUrl: string, res: Response) {
     try {
-      if (!isModelReady) {
+      if (!isModelReady()) {
         res.status(503).json({
           status: 503,
           message: "models not loader",
@@ -36,11 +36,27 @@ class MlClassServive {
       const model = getModel();
       const tensor = await this.processImageToTensor(imageUrl);
 
-      const prediction = model.predict(tensor);
-      const rawScores = await prediction.data();
+      if (!model) {
+        res.status(503).json({
+          status: 503,
+          message: "models not loader",
+        });
+        tensor.dispose();
+        return;
+      }
+
+      const prediction = await model.executeAsync(tensor);
+      const outputTensor = Array.isArray(prediction)
+        ? prediction[0]
+        : prediction;
+      const rawScores = await outputTensor.data();
 
       tensor.dispose();
-      prediction.dispose();
+      if (Array.isArray(prediction)) {
+        prediction.forEach((item) => item.dispose());
+      } else {
+        prediction.dispose();
+      }
 
       const topScore = Math.max(...(Array.from(rawScores) as any));
       const isDetected = topScore > 0.5;
