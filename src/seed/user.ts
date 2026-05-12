@@ -3,8 +3,6 @@ import { PrismaClient, RoleType } from "@prisma/client";
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log("--- Start Seeding ---");
-
   const users = [
     {
       name: "Admin Global",
@@ -40,8 +38,6 @@ async function main() {
 
     console.log(`Created user with id: ${user.id}`);
   }
-
-  console.log("--- Seeding Finished ---");
 }
 
 main()
