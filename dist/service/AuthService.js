@@ -82,7 +82,10 @@ class AuthService {
                 where: {
                     id: user.id,
                 },
-                data: token,
+                data: {
+                    name: name || user.name,
+                    picture: picture || user.picture,
+                },
             });
             return { tokens, user };
         }
