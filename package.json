@@ -44,8 +44,8 @@
   },
   "scripts": {
     "start": "node dist/server.js",
-    "format": "npx prettier --check \"src/**/*.ts\" \"vitest.config.ts\"",
-    "format:fix": "npx prettier --write \"src/**/*.ts\" \"vitest.config.ts\"",
+    "format": "npx prettier --check \"src/**/*.ts\" \"vitest.config.ts\" \"src/test/**/*.ts\"",
+    "format:fix": "npx prettier --write \"src/**/*.ts\" \"vitest.config.ts\" \"src/test/**/*.ts\"",
     "lint": "tsc --noEmit && tsc --noEmit -p tsconfig.test.json",
     "build": "npx prisma generate && tsc && npx tsc-alias",
     "dev": "nodemon --watch src --ext ts --exec \"ts-node -r tsconfig-paths/register src/server.ts\"",

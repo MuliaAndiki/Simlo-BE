@@ -1,3 +1,6 @@
 .env
 node_modules
 deploy.sh
+vitest.config.js
+dist
+.env.example
