@@ -42,5 +42,41 @@ class UserSessionController {
             }
         },
     ];
+    GetAllCurruentLogin = [
+        auth_1.verifyToken,
+        async (req, res) => {
+            try {
+                const users = req.user;
+                if (!users) {
+                    res.status(201).json({
+                        status: 401,
+                        message: "unauthorized",
+                    });
+                    return;
+                }
+                const service = await UserSessionService_1.default.getAllCurentLogin(res, users);
+                if (!service) {
+                    res.status(400).json({
+                        status: 400,
+                        message: "service error",
+                    });
+                    return;
+                }
+                res.status(200).json({
+                    status: 200,
+                    message: "successfully getcurent all login",
+                    data: service,
+                });
+            }
+            catch (error) {
+                res.status(500).json({
+                    status: 500,
+                    message: "server internal error",
+                    error: error,
+                });
+                return;
+            }
+        },
+    ];
 }
 exports.default = new UserSessionController();

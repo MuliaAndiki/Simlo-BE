@@ -92,5 +92,77 @@ class AuthController {
             return;
         }
     };
+    logout = [
+        auth_1.verifyToken,
+        async (req, res) => {
+            try {
+                const users = req.user;
+                if (!users) {
+                    res.status(401).json({
+                        status: 401,
+                        message: "Unauthorized",
+                    });
+                    return;
+                }
+                const service = await AuthService_1.default.LogoutService(res, users.id);
+                if (!service) {
+                    res.status(400).json({
+                        status: 400,
+                        message: "bad request",
+                    });
+                    return;
+                }
+                res.status(200).json({
+                    status: 200,
+                    message: "successfully logout from simlo",
+                    data: service,
+                });
+            }
+            catch (error) {
+                res.status(500).json({
+                    status: 500,
+                    message: "server internal error",
+                    error: error,
+                });
+                return;
+            }
+        },
+    ];
+    GetMe = [
+        auth_1.verifyToken,
+        async (req, res) => {
+            try {
+                const users = req.user;
+                if (!users) {
+                    res.status(401).json({
+                        status: 401,
+                        message: "Unauthorized",
+                    });
+                    return;
+                }
+                const service = await AuthService_1.default.GetMeService(res, users.id);
+                if (!service) {
+                    res.status(400).json({
+                        status: 400,
+                        message: "bad request",
+                    });
+                    return;
+                }
+                res.status(200).json({
+                    status: 200,
+                    message: "successfully get me",
+                    data: service,
+                });
+            }
+            catch (error) {
+                res.status(500).json({
+                    status: 500,
+                    message: "server internal error",
+                    error: error,
+                });
+                return;
+            }
+        },
+    ];
 }
 exports.default = new AuthController();

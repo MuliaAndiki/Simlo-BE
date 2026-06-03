@@ -1,9 +1,14 @@
-interface IBoundingBox {
+export interface IBoundingBox {
   x: number;
   y: number;
   height: number;
   width: number;
   label: string;
+}
+
+export interface ManualLabelPayload {
+  boundingBoxes: IBoundingBox[];
+  confidenceScore?: number;
 }
 
 export interface IMLResponse {
