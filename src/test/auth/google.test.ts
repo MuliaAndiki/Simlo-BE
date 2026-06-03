@@ -4,7 +4,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import app from "@/app";
 import prisma from "@/lib/prisma";
 import { api, authHeader } from "@/test/helpers/api";
-import { API_KEY, GOOGLE_CLIENT_ID } from "@/test/helpers/constants";
+import { getApiKey, GOOGLE_CLIENT_ID } from "@/test/helpers/constants";
 import { createUser } from "@/test/helpers/db";
 
 const googlePayload = {
@@ -157,11 +157,12 @@ describe("POST /api/auth/google", () => {
 
   it("rejects /api/auth/google when INTERNAL_API_SECRET env is unset", async () => {
     const original = process.env.INTERNAL_API_SECRET;
+    const apiKey = getApiKey();
     delete process.env.INTERNAL_API_SECRET;
 
     const res = await api(app)
       .raw.post("/api/auth/google")
-      .set("x-internal-api-key", API_KEY)
+      .set("x-internal-api-key", apiKey)
       .send({ token: "any" });
 
     process.env.INTERNAL_API_SECRET = original;

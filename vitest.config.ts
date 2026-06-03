@@ -5,7 +5,12 @@ export default defineConfig({
   test: {
     globals: true,
     environment: "node",
+    globalSetup: ["./src/test/global-setup.ts"],
     setupFiles: ["./src/test/setup.ts"],
+    env: {
+      TF_CPP_MIN_LOG_LEVEL: "2",
+      TF_ENABLE_ONEDNN_OPTS: "0",
+    },
     include: ["src/test/**/*.test.ts"],
     fileParallelism: false,
     pool: "forks",

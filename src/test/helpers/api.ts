@@ -1,9 +1,9 @@
 import request, { Test } from "supertest";
 import { Application } from "express";
-import { API_KEY } from "./constants";
+import { getApiKey } from "./constants";
 
 export function withApiKey(req: Test): Test {
-  return req.set("x-internal-api-key", API_KEY);
+  return req.set("x-internal-api-key", getApiKey());
 }
 
 export function api(app: Application) {
