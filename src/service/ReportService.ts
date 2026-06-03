@@ -11,7 +11,8 @@ const DEFAULT_POTHOLE_LABEL = "berlubang";
 function isValidBoundingBox(box: IBoundingBox): boolean {
   const coords = [box.x, box.y, box.width, box.height];
   return coords.every(
-    (value) => typeof value === "number" && Number.isFinite(value) && value >= 0,
+    (value) =>
+      typeof value === "number" && Number.isFinite(value) && value >= 0,
   );
 }
 class ReportService {
