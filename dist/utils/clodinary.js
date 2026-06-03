@@ -19,7 +19,7 @@ cloudinary_1.v2.config({
 });
 const uploadCloudinary = async (buffer, folder, originalname) => {
     const ext = path.extname(originalname).toLowerCase();
-    const filename = path.basename(originalname, ext); // Tanpa ekstensi
+    const filename = path.basename(originalname, ext);
     const isImage = [".jpg", ".jpeg", ".png", ".webp"].includes(ext);
     const resource_type = isImage ? "image" : "raw";
     return new Promise((resolve, reject) => {

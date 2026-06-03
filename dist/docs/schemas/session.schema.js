@@ -6,10 +6,43 @@ exports.sessionSchemas = {
         get: {
             tags: ["Session"],
             summary: "Ambil data user saat ini dari session",
-            security: [{ bearerAuth: [] }],
+            security: [{ bearerAuth: [], ApiKeyAuth: [] }],
             responses: {
                 "200": {
                     description: "Berhasil mengambil user saat ini",
+                    content: {
+                        "application/json": {
+                            schema: { $ref: "#/components/schemas/ApiResponse" },
+                        },
+                    },
+                },
+                "401": {
+                    description: "Unauthorized",
+                    content: {
+                        "application/json": {
+                            schema: { $ref: "#/components/schemas/ErrorResponse" },
+                        },
+                    },
+                },
+                "500": {
+                    description: "Server error",
+                    content: {
+                        "application/json": {
+                            schema: { $ref: "#/components/schemas/ErrorResponse" },
+                        },
+                    },
+                },
+            },
+        },
+    },
+    "/api/session/allCurent": {
+        get: {
+            tags: ["Session"],
+            summary: "Seluruh Seluruh Data Login session",
+            security: [{ bearerAuth: [], ApiKeyAuth: [] }],
+            responses: {
+                "200": {
+                    description: "Berhasil mengambil seluruh curent user ",
                     content: {
                         "application/json": {
                             schema: { $ref: "#/components/schemas/ApiResponse" },

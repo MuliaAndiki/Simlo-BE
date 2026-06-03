@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 async function main() {
-    console.log("--- Start Seeding ---");
     const users = [
         {
             name: "Admin Global",
@@ -36,7 +35,6 @@ async function main() {
             });
         console.log(`Created user with id: ${user.id}`);
     }
-    console.log("--- Seeding Finished ---");
 }
 main()
     .catch((e) => {

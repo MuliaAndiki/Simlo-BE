@@ -215,6 +215,45 @@ class ReportController {
       }
     },
   ];
+  public manualLabel = [
+    verifyToken,
+    async (req: Request, res: Response): Promise<void> => {
+      try {
+        const users: JwtPayload = req.user!;
+
+        if (!users) {
+          res.status(401).json({
+            status: 401,
+            message: "Unauthorized",
+          });
+          return;
+        }
+
+        const service = await ReportService.manualLabelReportService(
+          res,
+          req,
+          users,
+        );
+
+        if (!service) {
+          return;
+        }
+
+        res.status(200).json({
+          status: 200,
+          message: "Labeling manual jalan berlobang berhasil disimpan",
+          data: service,
+        });
+      } catch (error) {
+        res.status(500).json({
+          status: 500,
+          message: "server internal error",
+          error: error,
+        });
+      }
+    },
+  ];
+
   public getReportById = [
     verifyToken,
     async (req: Request, res: Response): Promise<void> => {
