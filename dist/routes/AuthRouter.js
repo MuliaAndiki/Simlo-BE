@@ -15,6 +15,8 @@ class AuthRouter {
         this.authRouter.post("/google", AuthController_1.default.loginGoogle);
         this.authRouter.patch("/picture", AuthController_1.default.patchPictureUser);
         this.authRouter.post("/developer", AuthController_1.default.loginDeveloper);
+        this.authRouter.post("/logout", AuthController_1.default.logout);
+        this.authRouter.get("/me", AuthController_1.default.GetMe);
     }
 }
 exports.default = new AuthRouter().authRouter;

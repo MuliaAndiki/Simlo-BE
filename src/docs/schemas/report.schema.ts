@@ -257,6 +257,113 @@ export const reportSchemas = {
       },
     },
   },
+  "/api/report/manual-label/{id}": {
+    post: {
+      tags: ["Report"],
+      summary: "Labeling manual jalan berlobang",
+      description:
+        "Digunakan apabila gambar laporan tidak terdeteksi oleh model ML. Pengguna dapat menambahkan bounding box secara manual.",
+      security: [{ bearerAuth: [], ApiKeyAuth: [] }],
+      parameters: [
+        {
+          name: "id",
+          in: "path",
+          required: true,
+          schema: { type: "string" },
+          description: "ID laporan yang akan dilabeli secara manual",
+        },
+      ],
+      requestBody: {
+        required: true,
+        content: {
+          "application/json": {
+            schema: {
+              type: "object",
+              properties: {
+                confidenceScore: {
+                  type: "number",
+                  minimum: 0,
+                  maximum: 1,
+                  example: 1,
+                  description: "Opsional. Default 1 untuk labeling manual",
+                },
+                boundingBoxes: {
+                  type: "array",
+                  minItems: 1,
+                  items: {
+                    type: "object",
+                    properties: {
+                      x: { type: "number", example: 120 },
+                      y: { type: "number", example: 80 },
+                      width: { type: "number", example: 64 },
+                      height: { type: "number", example: 48 },
+                      label: {
+                        type: "string",
+                        example: "berlubang",
+                        description: "Default berlubang jika tidak diisi",
+                      },
+                    },
+                    required: ["x", "y", "width", "height"],
+                  },
+                },
+              },
+              required: ["boundingBoxes"],
+            },
+          },
+        },
+      },
+      responses: {
+        "200": {
+          description: "Labeling manual berhasil disimpan",
+          content: {
+            "application/json": {
+              schema: { $ref: "#/components/schemas/ApiResponse" },
+            },
+          },
+        },
+        "400": {
+          description: "Payload tidak valid",
+          content: {
+            "application/json": {
+              schema: { $ref: "#/components/schemas/ErrorResponse" },
+            },
+          },
+        },
+        "403": {
+          description: "Tidak memiliki akses ke laporan",
+          content: {
+            "application/json": {
+              schema: { $ref: "#/components/schemas/ErrorResponse" },
+            },
+          },
+        },
+        "404": {
+          description: "Laporan atau hasil ML tidak ditemukan",
+          content: {
+            "application/json": {
+              schema: { $ref: "#/components/schemas/ErrorResponse" },
+            },
+          },
+        },
+        "409": {
+          description: "Laporan sudah terdeteksi oleh model (non-admin)",
+          content: {
+            "application/json": {
+              schema: { $ref: "#/components/schemas/ErrorResponse" },
+            },
+          },
+        },
+        "500": {
+          description: "Server error",
+          content: {
+            "application/json": {
+              schema: { $ref: "#/components/schemas/ErrorResponse" },
+            },
+          },
+        },
+      },
+    },
+  },
   "/api/report/get": {
     get: {
       tags: ["Report"],

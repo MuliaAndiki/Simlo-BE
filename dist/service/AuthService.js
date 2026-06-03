@@ -197,5 +197,60 @@ class AuthService {
             return;
         }
     }
+    async LogoutService(res, id) {
+        try {
+            const users = await prisma_1.default.user.findUnique({
+                where: {
+                    id: id,
+                },
+            });
+            if (!users) {
+                res.status(400).json({
+                    status: 400,
+                    message: "users not found",
+                });
+                return;
+            }
+            const session = await prisma_1.default.userSession.deleteMany({
+                where: {
+                    userID: id,
+                },
+            });
+            return session;
+        }
+        catch (error) {
+            res.status(500).json({
+                status: 500,
+                message: "service internal error",
+                error: error,
+            });
+            return;
+        }
+    }
+    async GetMeService(res, id) {
+        try {
+            const users = await prisma_1.default.user.findFirst({
+                where: {
+                    id: id,
+                },
+            });
+            if (!users) {
+                res.status(404).json({
+                    status: 404,
+                    message: "users not found",
+                });
+                return;
+            }
+            return users;
+        }
+        catch (error) {
+            res.status(500).json({
+                status: 500,
+                message: "service internal error",
+                error: error,
+            });
+            return;
+        }
+    }
 }
 exports.default = new AuthService();

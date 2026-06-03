@@ -13,6 +13,7 @@ class UserSessionRoutes {
     }
     routes() {
         this.userSessionRouter.get("/current", UserSessionController_1.default.curentUser);
+        this.userSessionRouter.get("/allCurent", UserSessionController_1.default.GetAllCurruentLogin);
     }
 }
 exports.default = new UserSessionRoutes().userSessionRouter;

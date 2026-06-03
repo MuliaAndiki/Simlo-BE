@@ -27,6 +27,12 @@ const options = {
                     scheme: "bearer",
                     bearerFormat: "JWT",
                 },
+                ApiKeyAuth: {
+                    type: "apiKey",
+                    in: "header",
+                    name: "x-internal-api-key",
+                    description: "Masukkan Internal API Key Anda di sini",
+                },
             },
             schemas: {
                 ErrorResponse: {
@@ -37,46 +43,6 @@ const options = {
                         error: { type: ["string", "object"], nullable: true },
                     },
                 },
-                LoginGoogleRequest: {
-                    type: "object",
-                    properties: {
-                        token: { type: "string", example: "ya29.A0ARrdaM..." },
-                    },
-                    required: ["token"],
-                },
-                PatchPictureRequest: {
-                    type: "object",
-                    properties: {
-                        picture: {
-                            type: "string",
-                            example: "https://example.com/avatar.jpg",
-                        },
-                    },
-                    required: ["picture"],
-                },
-                AuthData: {
-                    type: "object",
-                    properties: {
-                        tokens: {
-                            type: "string",
-                            example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-                        },
-                        user: {
-                            type: "object",
-                            properties: {
-                                id: { type: "string", example: "user-123" },
-                                email: { type: "string", example: "user@example.com" },
-                                fullName: { type: "string", example: "John Doe" },
-                                picture: {
-                                    type: "string",
-                                    example: "https://example.com/avatar.jpg",
-                                },
-                                role: { type: "string", example: "user" },
-                                sessionId: { type: "string", example: "session-456" },
-                            },
-                        },
-                    },
-                },
                 ApiResponse: {
                     type: "object",
                     properties: {
@@ -85,50 +51,13 @@ const options = {
                         data: { type: "object" },
                     },
                 },
-                ReportStatusEnum: {
-                    type: "string",
-                    enum: ["isPending", "inProgress", "done", "rejected"],
-                },
-                CreateReportRequest: {
-                    type: "object",
-                    properties: {
-                        city: { type: "string", example: "Jakarta" },
-                        address_detail: { type: "string", example: "Jl. Sudirman No. 10" },
-                        image_url: {
-                            type: "string",
-                            example: "https://example.com/report.jpg",
-                        },
-                        latitude: { type: "number", example: -6.2 },
-                        longitude: { type: "number", example: 106.816666 },
-                        reportStatus: { $ref: "#/components/schemas/ReportStatusEnum" },
-                    },
-                    required: [
-                        "city",
-                        "address_detail",
-                        "image_url",
-                        "latitude",
-                        "longitude",
-                        "reportStatus",
-                    ],
-                },
-                ReportResponse: {
-                    type: "object",
-                    properties: {
-                        id: { type: "string", example: "report-789" },
-                        userID: { type: "string", example: "user-123" },
-                        city: { type: "string", example: "Jakarta" },
-                        address_detail: { type: "string", example: "Jl. Sudirman No. 10" },
-                        image_url: {
-                            type: "string",
-                            example: "https://example.com/report.jpg",
-                        },
-                        latitude: { type: "number", example: -6.2 },
-                        longitude: { type: "number", example: 106.816666 },
-                        reportStatus: { $ref: "#/components/schemas/ReportStatusEnum" },
-                    },
-                },
             },
         },
+        security: [
+            {
+                ApiKeyAuth: [],
+            },
+        ],
         paths: {
             ...auth_schema_1.authSchemas,
             ...report_schema_1.reportSchemas,

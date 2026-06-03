@@ -149,5 +149,116 @@ class ReportController {
             }
         },
     ];
+    getAllReport = [
+        auth_1.verifyToken,
+        async (req, res) => {
+            try {
+                const users = req.user;
+                if (!users) {
+                    res.status(401).json({
+                        status: 401,
+                        message: "Unauthorized",
+                    });
+                    return;
+                }
+                const service = await ReportService_1.default.getReportService(res);
+                if (!service) {
+                    res.status(400).json({
+                        status: 400,
+                        message: "service bad request",
+                    });
+                    return;
+                }
+                res.status(200).json({
+                    status: 200,
+                    message: "successfully get report",
+                    data: service,
+                });
+            }
+            catch (error) {
+                res.status(500).json({
+                    status: 500,
+                    message: "server internal error",
+                    error: error,
+                });
+                return;
+            }
+        },
+    ];
+    manualLabel = [
+        auth_1.verifyToken,
+        async (req, res) => {
+            try {
+                const users = req.user;
+                if (!users) {
+                    res.status(401).json({
+                        status: 401,
+                        message: "Unauthorized",
+                    });
+                    return;
+                }
+                const service = await ReportService_1.default.manualLabelReportService(res, req, users);
+                if (!service) {
+                    return;
+                }
+                res.status(200).json({
+                    status: 200,
+                    message: "Labeling manual jalan berlobang berhasil disimpan",
+                    data: service,
+                });
+            }
+            catch (error) {
+                res.status(500).json({
+                    status: 500,
+                    message: "server internal error",
+                    error: error,
+                });
+            }
+        },
+    ];
+    getReportById = [
+        auth_1.verifyToken,
+        async (req, res) => {
+            try {
+                const users = req.user;
+                const { id } = req.params;
+                if (!users) {
+                    res.status(401).json({
+                        status: 401,
+                        message: "Unauthorized",
+                    });
+                    return;
+                }
+                if (!id) {
+                    res.status(404).json({
+                        status: 404,
+                        message: "params not found",
+                    });
+                    return;
+                }
+                const service = await ReportService_1.default.getReportServiceByID(res, id);
+                if (!service) {
+                    res.status(400).json({
+                        status: 400,
+                        message: "service bad request",
+                    });
+                    return;
+                }
+                res.status(200).json({
+                    status: 200,
+                    message: "successfully get report byID",
+                    data: service,
+                });
+            }
+            catch (error) {
+                res.status(500).json({
+                    status: 500,
+                    message: "server internal error",
+                    error: error,
+                });
+                return;
+            }
+        },
+    ];
 }
 exports.default = new ReportController();
