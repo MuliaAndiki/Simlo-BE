@@ -18,7 +18,5 @@ fast/__pycache__/
 **/__pycache__/
 *.pyc
 
-# ML model (besar, simpan lokal / storage terpisah)
-best.pt
-fast/best.pt
-*.pt
+
+
