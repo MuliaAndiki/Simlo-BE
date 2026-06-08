@@ -1,9 +1,11 @@
 import { IMLResponse } from "@/types/ml.types";
 
 const ML_SERVICE_URL = process.env.ML_SERVICE_URL ?? "http://localhost:8000";
+/** Default 3 menit — YOLO + download gambar + anotasi bisa lambat saat cold start */
 const ML_SERVICE_TIMEOUT_MS = Number(
-  process.env.ML_SERVICE_TIMEOUT_MS ?? 30000,
+  process.env.ML_SERVICE_TIMEOUT_MS ?? 180000,
 );
+const ML_HEALTH_TIMEOUT_MS = Number(process.env.ML_HEALTH_TIMEOUT_MS ?? 15000);
 
 export class MlServiceError extends Error {
   constructor(
@@ -72,9 +74,18 @@ class MlClassServive {
         throw error;
       }
 
+      const isTimeout =
+        error instanceof Error &&
+        (error.name === "TimeoutError" ||
+          error.name === "AbortError" ||
+          error.message.toLowerCase().includes("timeout") ||
+          error.message.toLowerCase().includes("aborted"));
+
       throw new MlServiceError(
         503,
-        "ml service unavailable",
+        isTimeout
+          ? `ML service timeout setelah ${ML_SERVICE_TIMEOUT_MS / 1000} detik. Coba lagi atau naikkan ML_SERVICE_TIMEOUT_MS.`
+          : "ml service unavailable",
         error instanceof Error ? error.message : error,
       );
     }
@@ -83,7 +94,7 @@ class MlClassServive {
   public async proxyHealthCheck() {
     const mlResponse = await fetch(`${ML_SERVICE_URL}/health`, {
       method: "GET",
-      signal: AbortSignal.timeout(ML_SERVICE_TIMEOUT_MS),
+      signal: AbortSignal.timeout(ML_HEALTH_TIMEOUT_MS),
     });
 
     if (!mlResponse.ok) {
