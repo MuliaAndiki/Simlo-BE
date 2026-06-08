@@ -1,10 +1,24 @@
+# Env & secrets
 .env
-node_modules
-deploy.sh
+express/.env
+fast/.env
+
+# Dependencies
+node_modules/
+express/node_modules/
+
+# Build output
+dist/
+express/dist/
 vitest.config.js
-dist
-.env.example
-./fast/env
-deploy.sh
+
+# Python / FastAPI
+fast/.venv/
+fast/__pycache__/
+**/__pycache__/
+*.pyc
+
+# ML model (besar, simpan lokal / storage terpisah)
 best.pt
-/fast/.venv
+fast/best.pt
+*.pt
