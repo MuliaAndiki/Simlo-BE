@@ -8,6 +8,7 @@ from typing import Annotated
 import cv2
 from dotenv import load_dotenv
 from fastapi import Depends, FastAPI, Header, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field, HttpUrl
 from ultralytics import YOLO
 
@@ -17,8 +18,24 @@ MODEL_PATH = Path(__file__).resolve().parent / "best.pt"
 MODEL_VERSION = os.getenv("ML_MODEL_VERSION", "best.pt-v1.0.0")
 CONFIDENCE_THRESHOLD = float(os.getenv("ML_CONFIDENCE_THRESHOLD", "0.5"))
 INTERNAL_API_SECRET = os.getenv("INTERNAL_API_SECRET", "")
+BACKEND_URL = os.getenv("BACKEND_URL", "http://localhost:5000").rstrip("/")
 
 model: YOLO | None = None
+
+
+def get_cors_origins() -> list[str]:
+    origins: list[str] = []
+
+    if BACKEND_URL:
+        origins.append(BACKEND_URL)
+
+    extra_origins = os.getenv("CORS_ALLOWED_ORIGINS", "")
+    for origin in extra_origins.split(","):
+        cleaned = origin.strip().rstrip("/")
+        if cleaned and cleaned not in origins:
+            origins.append(cleaned)
+
+    return origins
 
 
 class PredictRequest(BaseModel):
@@ -47,6 +64,7 @@ class HealthResponse(BaseModel):
     model_loaded: bool
     model_path: str
     model_version: str
+    backend_url: str
 
 
 def verify_internal_api_key(
@@ -73,6 +91,7 @@ async def lifespan(_: FastAPI):
         raise RuntimeError(f"Model file not found: {MODEL_PATH}")
 
     model = YOLO(str(MODEL_PATH))
+    print(f"ML service terhubung ke backend: {BACKEND_URL}")
     yield
     model = None
 
@@ -84,6 +103,14 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=get_cors_origins(),
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_headers=["*"],
+)
+
 
 @app.get("/health", response_model=HealthResponse)
 def health() -> HealthResponse:
@@ -92,6 +119,7 @@ def health() -> HealthResponse:
         model_loaded=model is not None,
         model_path=str(MODEL_PATH),
         model_version=MODEL_VERSION,
+        backend_url=BACKEND_URL,
     )
 
 
