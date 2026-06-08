@@ -4,3 +4,7 @@ deploy.sh
 vitest.config.js
 dist
 .env.example
+./fast/env
+deploy.sh
+best.pt
+/fast/.venv
