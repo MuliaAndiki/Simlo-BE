@@ -101,7 +101,10 @@ class ReportService {
             createed.id,
           );
         } catch (uploadError) {
-          console.error("Gagal upload gambar hasil ML ke Cloudinary:", uploadError);
+          console.error(
+            "Gagal upload gambar hasil ML ke Cloudinary:",
+            uploadError,
+          );
         }
       }
 
