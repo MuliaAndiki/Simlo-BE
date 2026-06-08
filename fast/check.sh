@@ -22,6 +22,12 @@ pip install --quiet -r requirements.txt
 echo "==> FastAPI: syntax check"
 python -m compileall -q main.py
 
+if [ -f ".env" ] && grep -q "^BACKEND_URL=" .env; then
+	echo "==> FastAPI: BACKEND_URL terkonfigurasi"
+else
+	echo "WARN: BACKEND_URL belum diset di fast/.env (diperlukan saat deploy terpisah)"
+fi
+
 if [ ! -f "best.pt" ]; then
 	echo "WARN: best.pt tidak ditemukan di fast/ (diperlukan saat runtime, bukan untuk compile check)"
 else
