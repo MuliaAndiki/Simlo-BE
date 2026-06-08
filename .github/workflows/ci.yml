@@ -23,17 +23,22 @@ jobs:
         with:
           node-version: "22"
           cache: npm
+          cache-dependency-path: express/package-lock.json
 
       - name: Install dependencies
+        working-directory: express
         run: npm ci
 
       - name: Generate Prisma client
+        working-directory: express
         run: npm run prisma:generate
 
       - name: Format check
+        working-directory: express
         run: npm run format
 
       - name: Lint & typecheck
+        working-directory: express
         run: npm run lint
 
   backend_tests:
@@ -48,6 +53,7 @@ jobs:
       INTERNAL_API_SECRET: ci-test-internal-api-secret
       GOOGLE_CLIENT_ID: test-google-client-id
       GOOGLE_CLIENT_SECRET: test-google-client-secret
+      ML_SERVICE_URL: http://localhost:8000
     services:
       postgres:
         image: postgres:16
@@ -71,15 +77,20 @@ jobs:
         with:
           node-version: "22"
           cache: npm
+          cache-dependency-path: express/package-lock.json
 
       - name: Install dependencies
+        working-directory: express
         run: npm ci
 
       - name: Generate Prisma client
+        working-directory: express
         run: npm run prisma:generate
 
       - name: Run database migrations
+        working-directory: express
         run: npm run prisma:migrate:deploy
 
       - name: Run backend tests
+        working-directory: express
         run: npm test
