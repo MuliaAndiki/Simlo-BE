@@ -7,7 +7,7 @@ const options: swaggerJSDoc.Options = {
   definition: {
     openapi: "3.0.0",
     info: {
-      title: "Boilerpad API",
+      title: "Simlo Api",
       version: "1.0.0",
       description:
         "API dokumentasi untuk Simlo-BE. Menggunakan komponen OpenAPI untuk schema dan keamanan JWT.",
