@@ -364,7 +364,7 @@ export const reportSchemas = {
       },
     },
   },
-  "/api/report/get": {
+  "/api/report/": {
     get: {
       tags: ["Report"],
       summary: "Get All Report",
@@ -397,7 +397,7 @@ export const reportSchemas = {
       },
     },
   },
-  "/api/report/get/:id": {
+  "/api/report/:id": {
     get: {
       tags: ["Report"],
       summary: "Get All Report By ID",
