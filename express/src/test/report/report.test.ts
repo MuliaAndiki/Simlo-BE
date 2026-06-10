@@ -53,27 +53,25 @@ describe("Report API", () => {
     });
   });
 
-  describe("GET /api/report/report", () => {
+  describe("GET /api/report", () => {
     it("returns all reports", async () => {
       const { user, token } = await loginAsUser();
       await createReportWithMl(user.id);
 
-      const res = await api(app)
-        .get("/api/report/report")
-        .set(authHeader(token));
+      const res = await api(app).get("/api/report").set(authHeader(token));
 
       expect(res.status).toBe(200);
       expect(res.body.data).toHaveLength(1);
     });
   });
 
-  describe("GET /api/report/report/:id", () => {
+  describe("GET /api/report/:id", () => {
     it("returns report by id", async () => {
       const { user, token } = await loginAsUser();
       const { report } = await createReportWithMl(user.id);
 
       const res = await api(app)
-        .get(`/api/report/report/${report.id}`)
+        .get(`/api/report/${report.id}`)
         .set(authHeader(token));
 
       expect(res.status).toBe(200);
