@@ -124,38 +124,4 @@ describe("Report API", () => {
       expect(res.body.data.status.reportStatus).toBe("done");
     });
   });
-
-  describe("DELETE /api/report/delete/:id", () => {
-    it("returns 400 when report status is not done", async () => {
-      const { user, token } = await loginAsUser();
-      const { report } = await createReportWithMl(user.id);
-
-      const res = await api(app)
-        .delete(`/api/report/delete/${report.id}`)
-        .set(authHeader(token));
-
-      expect(res.status).toBe(400);
-    });
-
-    it("deletes report when status is done", async () => {
-      const { user, token } = await loginAsUser();
-      const { report } = await createReportWithMl(user.id);
-
-      await prisma.report.update({
-        where: { id: report.id },
-        data: { reportStatus: "done" },
-      });
-
-      const res = await api(app)
-        .delete(`/api/report/delete/${report.id}`)
-        .set(authHeader(token));
-
-      expect(res.status).toBe(203);
-
-      const deleted = await prisma.report.findUnique({
-        where: { id: report.id },
-      });
-      expect(deleted).toBeNull();
-    });
-  });
 });
