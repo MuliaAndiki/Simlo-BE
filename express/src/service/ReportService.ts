@@ -167,7 +167,7 @@ class ReportService {
         },
       });
 
-      if (!status || status.reportStatus !== "done") {
+      if (!status || status.reportStatus === "done") {
         res.status(400).json({
           status: 400,
           message: "bad request ",
@@ -178,7 +178,6 @@ class ReportService {
       const deleted = await prisma.report.delete({
         where: {
           id: id,
-          userID: users.id,
         },
       });
 
